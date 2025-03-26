@@ -1,0 +1,39 @@
+-- Configuration settings
+local spawnInterval = 1 -- Time interval (in seconds) between spawning blocks
+local blockSize = Vector3.new(4, 1, 4) -- Size of each block
+local blockColor = BrickColor.new("Bright red") -- Color of the blocks
+
+-- Function to spawn a block on top of the player
+local function spawnBlockAbovePlayer(player)
+    -- Ensure the player has a character and it's properly set up
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        -- Get the position of the player's HumanoidRootPart
+        local playerPosition = player.Character.HumanoidRootPart.Position
+        
+        -- Calculate the spawn position (a bit above the player's current position)
+        local spawnPosition = playerPosition + Vector3.new(0, 5, 0) -- 5 studs above the player
+        
+        -- Create the block
+        local block = Instance.new("Part")
+        block.Size = blockSize
+        block.Position = spawnPosition
+        block.Anchored = false -- Make the block unanchored
+        block.Color = blockColor.Color
+        block.Parent = workspace -- Parent the block to the workspace to make it visible
+        
+        -- Optional: Add physics properties like collision (default is true)
+        block.CanCollide = true
+    end
+end
+
+-- Loop that spawns blocks every second for all players
+while true do
+    -- Iterate over all players
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Character then
+            -- Spawn a block above the player
+            spawnBlockAbovePlayer(player)
+        end
+    end
+    wait(spawnInterval) -- Wait for the specified interval before spawning the next block
+end
